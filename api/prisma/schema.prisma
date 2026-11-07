@@ -23,3 +23,18 @@ model User {
   name String
   role Role
 }
+
+model Genre {
+  id Int @id @default(autoincrement())
+  name String
+  books Book[]
+}
+
+model Book {
+  id Int @id @default(autoincrement())
+  title String
+  author String
+  genreId Int
+
+  genre Genre @relation(fields: [genreId], references: [id])
+}
