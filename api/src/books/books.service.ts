@@ -9,7 +9,9 @@ export class BooksService {
   constructor(private readonly prisma: PrismaService) {}
 
   create(createBookDto: CreateBookDto) {
-    return 'This action adds a new book';
+    return this.prisma.book.create({
+      data: createBookDto
+    });
   }
 
   findAll(genreId?: string, search?: string, page = 1, limit = 10) {
@@ -47,14 +49,22 @@ export class BooksService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} book`;
+    return this.prisma.book.findUnique({
+      where: {id: id},
+      include: {genre: true}
+    });
   }
 
   update(id: number, updateBookDto: UpdateBookDto) {
-    return `This action updates a #${id} book`;
+    return this.prisma.book.update({
+      where: {id: id},
+      data: updateBookDto
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} book`;
+    return this.prisma.book.delete({
+      where: {id: id}
+    });
   }
 }
