@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto.js';
 import { UpdateBookDto } from './dto/update-book.dto.js';
 import { PrismaService } from '../prisma/prisma.service.js';
@@ -48,11 +48,16 @@ export class BooksService {
     });
   }
 
-  findOne(id: number) {
-    return this.prisma.book.findUnique({
+  async findOne(id: number) {
+    const book = await this.prisma.book.findUnique({
       where: {id: id},
       include: {genre: true}
     });
+    if (!book){
+      throw new NotFoundException(`Book with ${id} not found`);
+    }
+
+    return book;
   }
 
   update(id: number, updateBookDto: UpdateBookDto) {
