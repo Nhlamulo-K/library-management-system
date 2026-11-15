@@ -29,6 +29,11 @@ export class AuthService {
                 username: registerDto.username,
                 passwordHash: passwordHash,
                 role: "PATRON"
+            },
+            select: {
+                id: true,
+                username: true,
+                role: true
             }
         });
     }
