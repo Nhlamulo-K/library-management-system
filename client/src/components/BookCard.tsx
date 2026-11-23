@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 type BookCardProps = {
     book: {
         id: number
@@ -13,6 +15,8 @@ function BookCard({book}: BookCardProps) {
             <h2>{book.title}</h2>
             <p>Author: {book.author}</p>
             <p>ISBN: {book.isbn}</p>
+
+            <Link to={`/books/${book.id}`}>View Details</Link>
         </div>
     )
 }
