@@ -17,6 +17,7 @@ function BookGrid({search, genreId}: BookBridProps) {
     const [books, setBooks] = useState<Book[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
+    const [page, setPage] = useState(1)
 
     useEffect(() => {
         async function fetchBooks() {
@@ -25,6 +26,8 @@ function BookGrid({search, genreId}: BookBridProps) {
                 setError('')
 
                 const params = new URLSearchParams()
+                params.append('page', page.toString())
+                params.append('limit', '10')
 
                 if (search) {
                     params.append('search', search)
@@ -53,7 +56,7 @@ function BookGrid({search, genreId}: BookBridProps) {
             }
         }
         fetchBooks()
-    }, [search, genreId])
+    }, [search, genreId, page])
 
     if (loading) {
         return <p>Loading books...</p>
@@ -67,11 +70,27 @@ function BookGrid({search, genreId}: BookBridProps) {
         return <p>No books found!</p>
     }
 
+    useEffect(() => {
+        setPage(1)
+    }, [search, genreId])
+
     return (
         <div>
             {books.map((book) => (
                 <BookCard key={book.id} book={book} />
             ))}
+
+            <div>
+                <button onClick={() => setPage(page-1)} disabled={page===1}>
+                    Previous
+                </button>
+
+                <span>Page {page}</span>
+
+                <button onClick={() => setPage(page+1)} disabled={books.length<10}>
+                    Next
+                </button>
+            </div>
         </div>
     )
 }
