@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState, type FormEvent } from "react"
+import { useNavigate } from "react-router-dom"
 
 function LoginPage() {
     const [username, setUsername] =useState('')
@@ -6,11 +7,45 @@ function LoginPage() {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
+    const navigate = useNavigate()
+
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault()
+
+        setLoading(true)
+        setError('')
+
+        try {
+            const response = await fetch(
+                `${import.meta.env.VITE_API_URL}/auth/login`,
+                {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username, password})
+                }
+            )
+            const data = await response.json()
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Login failed')
+            }
+
+            localStorage.setItem('token', data.access_token)
+            navigate('/')
+        }
+        catch (error) {
+            setError(error instanceof Error ? error.message : 'Something went wrong')
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <div>
             <h1>Login</h1>
 
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label>Username</label>
                     <input
