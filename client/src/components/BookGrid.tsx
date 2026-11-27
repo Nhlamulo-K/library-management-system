@@ -58,6 +58,10 @@ function BookGrid({search, genreId}: BookBridProps) {
         fetchBooks()
     }, [search, genreId, page])
 
+    useEffect(() => {
+        setPage(1)
+    }, [search, genreId])
+
     if (loading) {
         return <p>Loading books...</p>
     }
@@ -69,10 +73,6 @@ function BookGrid({search, genreId}: BookBridProps) {
     if (books.length === 0) {
         return <p>No books found!</p>
     }
-
-    useEffect(() => {
-        setPage(1)
-    }, [search, genreId])
 
     return (
         <div>

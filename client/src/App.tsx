@@ -12,13 +12,12 @@ import SpaceBookingPage from './pages/SpaceBookingPage'
 function App() {
   return (
     <ReadingListProvider>
-      <Navbar />
       <Routes>
-        <Route path="/" element={<HomePage/>} />
-        <Route path="/books/:id" element={<BookDetail />} />
-        <Route path="/login" element={<LoginPage />}/>
-        <Route path="/register" element={<RegisterPage />}/>
-        <Route path="/space-booking" element={<ProtectedRoute><SpaceBookingPage/></ProtectedRoute>} />
+        <Route path="/" element={<><Navbar /> <HomePage/> </>} />
+        <Route path="/books/:id" element={<><Navbar /> <BookDetail /> </>} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/space-booking" element={<ProtectedRoute><><Navbar /> <SpaceBookingPage/> </> </ProtectedRoute>} />
       </Routes>
     </ReadingListProvider>
   )
